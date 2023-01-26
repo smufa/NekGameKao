@@ -43,7 +43,7 @@ margin_bottom = 32.0
 size_flags_horizontal = 3
 size_flags_vertical = 5
 size_flags_stretch_ratio = 12.0
-text = "localhost"
+text = "192.168.138.252"
 
 [node name="Button" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
 margin_left = 844.0

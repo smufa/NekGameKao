@@ -53,7 +53,7 @@ func _on_data(id):
 	if(data.error != OK):
 		print("nije uredu")
 	else:
-		emit_signal("playerMoved", id, data.result)
+		emit_signal("playerMoved", id, Vector2(data.result.x, data.result.y))
 		#print(data.result.x)
 	# _server.get_peer(id).put_packet(pkt)
 

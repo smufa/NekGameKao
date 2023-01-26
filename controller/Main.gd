@@ -69,7 +69,7 @@ func _physics_process(delta):
 		"y":one_direction.y
 	}
 	var packet: PoolByteArray = JSON.print(data).to_utf8()
-	if(connected and one_direction.x != 0):
+	if(connected):
 		print(one_direction.x)
 		_client.get_peer(1).put_packet(packet)
 

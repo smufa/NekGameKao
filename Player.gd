@@ -3,8 +3,14 @@ extends Area2D
 
 # Declare member variables here. Examples:
 export var speed = 100
+export var uuid = ""
+
+var movement_input: Vector2
+
 var screen_size
 # var b = "text"
+
+
 
 
 # Called when the node enters the scene tree for the first time.
@@ -23,6 +29,9 @@ func _process(delta):
 		velocity.y += 1
 	if Input.is_action_pressed("move_up"):
 		velocity.y -= 1
+		
+	# online controlls
+	velocity = movement_input * speed
 
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
@@ -34,3 +43,4 @@ func _process(delta):
 	position += velocity * delta
 	position.x = clamp(position.x, 0, screen_size.x)
 	position.y = clamp(position.y, 0, screen_size.y)
+
