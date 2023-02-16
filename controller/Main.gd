@@ -15,6 +15,7 @@ var input = null
 var test = null
 var nipple = null
 var nipple_center: Vector2
+var player_color_rect = null
 
 # joystick
 var joystick_active = false
@@ -33,17 +34,19 @@ func _ready():
 	indicator = $VBoxContainer/MarginContainer/HBoxContainer/Indicator
 	input = $VBoxContainer/MarginContainer/HBoxContainer/TextEdit
 	nipple = $VBoxContainer/mainLeft/MarginContainer/CenterContainer2/nipple
-	nipple_center = nipple.get_global_position()
-	#nipple.set_global_position(nipple.get_global_transform_with_canvas().origin)
+	player_color_rect = $VBoxContainer/PlayerColorRect
 	
-	# handle button on click
+	nipple_center = nipple.get_global_position()
+	
+	# handle button on click	
 	button.connect("pressed", self, "_button_pressed")
 	
 	# Connect base signals to get notified of connection open, close, and errors.
+	_client.connect("data_received", self, "_on_msg_receive")
 	_client.connect("connection_closed", self, "_closed")
 	_client.connect("connection_error", self, "_closed")
 	_client.connect("connection_established", self, "_connected")
-	_client.connect("data_received", self, "_on_data")
+	
 
 func _input(event):
 	if event is InputEventScreenTouch or event is InputEventScreenDrag:
@@ -53,7 +56,6 @@ func _input(event):
 			if move_vec.length() > 100:
 				move_vec = move_vec.normalized() * 100
 			nipple.set_global_position(nipple_center + move_vec)
-			#print(move_vec/100)
 			one_direction=move_vec/100
 			
 		else:
@@ -70,7 +72,7 @@ func _physics_process(delta):
 	}
 	var packet: PoolByteArray = JSON.print(data).to_utf8()
 	if(connected):
-		print(one_direction.x)
+		pass
 		_client.get_peer(1).put_packet(packet)
 
 func calculate_move_vec(event_position: Vector2):
@@ -88,6 +90,7 @@ func _button_pressed():
 		print("Unable to connect")
 		set_process(false)
 		indicator.color = Color(1,0,0,1)
+		button.set_text("Connect")
 	else:
 		connected = true
 
@@ -97,6 +100,7 @@ func _closed(was_clean = false):
 	print("Closed, clean: ", was_clean)
 	set_process(false)
 	indicator.color = Color(1,0,0,1)
+	button.set_text("Connect")	
 
 func _connected(proto = ""):
 	# This is called on connection, "proto" will be the selected WebSocket
@@ -106,25 +110,26 @@ func _connected(proto = ""):
 	button.set_text("Disconnect")
 	connected = true
 	
-	# You MUST always use get_peer(1).put_packet to send data to server,
-	# and not put_packet directly when not using the MultiplayerAPI.
-	_client.get_peer(1).put_packet("Test packet".to_utf8())
+	var packet: PoolByteArray = JSON.print({"hey":1}).to_utf8()
+	_client.get_peer(1).set_write_mode(WebSocketPeer.WRITE_MODE_BINARY)
+	_client.get_peer(1).put_packet(packet)
 	
-func _on_data(id):
+func _on_msg_receive():
+	print("ondata")
 	# Print the received packet, you MUST always use get_peer(id).get_packet to receive data,
 	# and not get_packet directly when not using the MultiplayerAPI.
-	var pkt = _client.get_peer(id).get_packet()
-	print("Got data from client %d: %s ... echoing" % [id, pkt.get_string_from_utf8()])
-	_client.get_peer(id).put_packet(pkt)
+	var pkt = _client.get_peer(1).get_packet()
+	# _client.get_peer(id).put_packet(pkt)
+	var data = JSON.parse(pkt.get_string_from_utf8())
+	if(data.error != OK):
+		print("nije uredu")
+	else:
+		if ("color" in data.result):
+			print("colorset")
+			player_color_rect.color = Color(data.result.color)
+			print(player_color_rect.color)
 	
 func _process(delta):
 	# Call this in _process or _physics_process. Data transfer, and signals
 	# emission will only happen when calling this function.
 	_client.poll()
-	
-
-func _test_pressed():
-	print("send ojla")
-	var packet: PoolByteArray = JSON.print("{'x':1,'y':2}").to_utf8()
-	print("Sending packet ", packet.get_string_from_utf8())
-	_client.get_peer(1).put_packet(packet)

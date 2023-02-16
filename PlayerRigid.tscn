@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://light.png" type="Texture" id=1]
+[ext_resource path="res://Player.gd" type="Script" id=3]
+
+[sub_resource type="PhysicsMaterial" id=7]
+friction = 2.0
+rough = true
+bounce = 0.94
+
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 30, 30 )
+
+[sub_resource type="StreamTexture" id=8]
+flags = 4
+load_path = "res://.import/icon.png-487276ed1e3a0c39cad0279d744ee560.stex"
+
+[sub_resource type="CanvasItemMaterial" id=10]
+
+[sub_resource type="Gradient" id=11]
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[node name="RigidBody2D" type="RigidBody2D"]
+mass = 0.15
+physics_material_override = SubResource( 7 )
+gravity_scale = 0.0
+linear_damp = 3.0
+angular_damp = 5.0
+script = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 9 )
+
+[node name="Light2D" type="Light2D" parent="."]
+texture = ExtResource( 1 )
+mode = 2
+shadow_enabled = true
+
+[node name="Sprite" type="Sprite" parent="."]
+light_mask = 2
+texture = SubResource( 8 )
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+material = SubResource( 10 )
+position = Vector2( -1, 0 )
+amount = 30
+lifetime = 3.0
+randomness = 0.13
+lifetime_randomness = 0.71
+local_coords = false
+emission_shape = 1
+emission_sphere_radius = 9.54
+gravity = Vector2( 0, 9 )
+scale_amount = 10.0
+color_ramp = SubResource( 11 )

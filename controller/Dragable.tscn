@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Dragable.gd" type="Script" id=1]
+[ext_resource path="res://spells/fireball.png" type="Texture" id=2]
+[ext_resource path="res://spells/EMPTY_SPELL.png" type="Texture" id=3]
+
+[node name="Dragable" type="VBoxContainer"]
+anchor_right = 0.672
+anchor_bottom = 0.293
+margin_left = 322.0
+margin_right = -60.1281
+margin_bottom = -51.8
+mouse_default_cursor_shape = 13
+input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 305.0
+margin_bottom = 124.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 5
+script = ExtResource( 1 )
+empty_texture = ExtResource( 3 )

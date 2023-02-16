@@ -17,13 +17,16 @@ func _ready():
 #	pass
 
 
-func _on_Server_playerConnected(uuid):
-	print("naj bi biu plajer")
+
+
+func _on_Server_playerConnected(uuid, col):
+	print(uuid, col)
 	var instance = player.instance()
-	add_child(instance)
-	instance.uuid = uuid
+	instance.set("uuid", uuid) # TO NE DELAAA
 	players[uuid] = instance
+	instance.set("my_col", Color(col))
+	add_child(instance)
 
 func _on_Server_playerMoved(uuid, pos):
-	# print("premik")
 	players[uuid].movement_input = pos
+	
