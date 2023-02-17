@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Wall.gd" type="Script" id=1]
+
+[sub_resource type="OccluderPolygon2D" id=12]
+polygon = PoolVector2Array( 203, -109, 207, 111, -151, 129 )
+
+[node name="Wall4" type="Polygon2D"]
+position = Vector2( 1478, 772 )
+color = Color( 1, 1, 1, 0 )
+polygon = PoolVector2Array( 203, -109, 207, 111, -151, 129 )
+script = ExtResource( 1 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource( 12 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PoolVector2Array( 203, -109, 207, 111, -151, 129 )
